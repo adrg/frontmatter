@@ -7,6 +7,10 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
+// UnmarshalFunc decodes the passed in `data` and stores it into
+// the value pointed to by `v`.
+type UnmarshalFunc func(data []byte, v interface{}) error
+
 // Format describes a front matter. It holds all the information
 // necessary in order to detect and decode a front matter format.
 type Format struct {
@@ -21,7 +25,7 @@ type Format struct {
 	// Unmarshal defines the unmarshal function used to decode
 	// the front matter data, after it has been detected.
 	// E.g.: json.Unmarshal (from the `encoding/json` package).
-	Unmarshal func(data []byte, v interface{}) error
+	Unmarshal UnmarshalFunc
 
 	// UnmarshalDelims specifies whether the front matter
 	// delimiters are included in the data to be unmarshaled.
@@ -34,7 +38,12 @@ type Format struct {
 	RequiresNewLine bool
 }
 
-func newFormat(start, end string, unmarshal func([]byte, interface{}) error,
+// NewFormat returns a new front matter format.
+func NewFormat(start, end string, unmarshal UnmarshalFunc) *Format {
+	return newFormat(start, end, unmarshal, false, false)
+}
+
+func newFormat(start, end string, unmarshal UnmarshalFunc,
 	unmarshalDelims, requiresNewLine bool) *Format {
 	return &Format{
 		Start:           start,
