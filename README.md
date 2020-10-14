@@ -12,10 +12,10 @@
         <img alt="Build status" src="https://github.com/adrg/frontmatter/workflows/CI/badge.svg">
     </a>
     <a href="https://codecov.io/gh/adrg/frontmatter">
-        <img alt="Code Coverage" src="https://codecov.io/gh/adrg/frontmatter/branch/master/graphs/badge.svg?branch=master">
+        <img alt="Code coverage" src="https://codecov.io/gh/adrg/frontmatter/branch/master/graphs/badge.svg?branch=master">
     </a>
     <a href="https://pkg.go.dev/github.com/adrg/frontmatter">
-        <img alt="pkg.go.dev documentation" src="https://img.shields.io/badge/go.dev-reference-007d9c?logo=go&logoColor=white">
+        <img alt="pkg.go.dev documentation" src="https://pkg.go.dev/badge/github.com/adrg/frontmatter">
     </a>
     <a href="https://opensource.org/licenses/MIT" rel="nofollow">
         <img alt="MIT License" src="https://img.shields.io/github/license/adrg/frontmatter"/>
