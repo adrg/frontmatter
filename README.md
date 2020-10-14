@@ -138,10 +138,6 @@ func main() {
 }
 ```
 
-## Stargazers over time
-
-[![Stargazers over time](https://starchart.cc/adrg/frontmatter.svg)](https://starchart.cc/adrg/frontmatter)
-
 ## Contributing
 
 Contributions in the form of pull requests, issues or just general feedback,
