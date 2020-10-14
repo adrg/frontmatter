@@ -8,25 +8,22 @@
 <h3 align="center">Go library for detecting and decoding various content front matter formats.</h3>
 
 <p align="center">
+    <a href="https://github.com/adrg/frontmatter/actions?query=workflow%3ACI">
+        <img alt="Build status" src="https://github.com/adrg/frontmatter/workflows/CI/badge.svg">
+    </a>
+    <a href="https://codecov.io/gh/adrg/frontmatter">
+        <img alt="Code Coverage" src="https://codecov.io/gh/adrg/frontmatter/branch/master/graphs/badge.svg?branch=master">
+    </a>
     <a href="https://pkg.go.dev/github.com/adrg/frontmatter">
         <img alt="pkg.go.dev documentation" src="https://img.shields.io/badge/go.dev-reference-007d9c?logo=go&logoColor=white">
-    </a>
-    <a href="https://godoc.org/github.com/adrg/frontmatter">
-        <img alt="GoDoc documentation" src="https://img.shields.io/badge/godoc-reference-blue.svg?style=flat"/>
     </a>
     <a href="https://opensource.org/licenses/MIT" rel="nofollow">
         <img alt="MIT License" src="https://img.shields.io/github/license/adrg/frontmatter"/>
     </a>
-    <a href="https://www.buymeacoffee.com/adrg">
-        <img alt="Buy me a coffee" src="https://img.shields.io/static/v1.svg?label=%20&message=Buy%20me%20a%20coffee&color=FF813F&logo=buy%20me%20a%20coffee&logoColor=white"/>
-    </a>
-    <a alt="Github stars" href="https://github.com/adrg/frontmatter/stargazers">
-        <img alt="GitHub stars" src="https://img.shields.io/github/stars/adrg/frontmatter?style=social">
-    </a>
-    <br />
     <a href="https://goreportcard.com/report/github.com/adrg/frontmatter">
         <img alt="Go report card" src="https://goreportcard.com/badge/github.com/adrg/frontmatter" />
     </a>
+    <br />
     <a href="https://github.com/adrg/frontmatter/graphs/contributors">
         <img alt="GitHub contributors" src="https://img.shields.io/github/contributors/adrg/frontmatter" />
     </a>
@@ -35,6 +32,12 @@
     </a>
     <a href="https://github.com/adrg/frontmatter/issues?q=is%3Aissue+is%3Aclosed">
         <img alt="GitHub closed issues" src="https://img.shields.io/github/issues-closed-raw/adrg/frontmatter" />
+    </a>
+    <a href="https://www.buymeacoffee.com/adrg">
+        <img alt="Buy me a coffee" src="https://img.shields.io/static/v1.svg?label=%20&message=Buy%20me%20a%20coffee&color=FF813F&logo=buy%20me%20a%20coffee&logoColor=white"/>
+    </a>
+    <a alt="Github stars" href="https://github.com/adrg/frontmatter/stargazers">
+        <img alt="GitHub stars" src="https://img.shields.io/github/stars/adrg/frontmatter?style=social">
     </a>
 
 ## Supported formats
