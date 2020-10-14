@@ -667,9 +667,8 @@ rest of the file`,
 		}
 	}
 
-	for i, tc := range testCases {
+	for _, tc := range testCases {
 		input := tc.input
-		t.Logf("Test case #%d:%s\n", i+1, input)
 
 		// Get expected data.
 		mExp, rExp, hasErr := tc.expectedFunc(input)

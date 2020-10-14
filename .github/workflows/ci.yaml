@@ -13,7 +13,7 @@ jobs:
         go: ['1.14']
     steps:
     - name: Setup
-      uses: actions/setup-go@v1
+      uses: actions/setup-go@v2
       with:
         go-version: ${{ matrix.go }}
 
@@ -26,14 +26,14 @@ jobs:
         go get -v -t -d ./...
         go get -u golang.org/x/lint/golint
 
-    - name: Test
-      run: go test -v  -coverprofile=coverage.txt -covermode=atomic ./...
+    - name: Lint
+      run: golint -set_exit_status=1 ./...
 
     - name: Vet
       run: go vet ./...
 
-    - name: Lint
-      run: golint -set_exit_status=1 ./...
+    - name: Test
+      run: go test -v  -coverprofile=coverage.txt -covermode=atomic ./...
 
     - name: Coverage
       uses: codecov/codecov-action@v1
