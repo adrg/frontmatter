@@ -48,8 +48,6 @@ For more information, see the [usage examples](#usage) below.
 
 ![Default front matter formats](https://raw.githubusercontent.com/adrg/adrg.github.io/master/assets/projects/frontmatter/formats.png)
 
-
-
 ## Installation
 
 ```bash
@@ -140,6 +138,8 @@ func main() {
 	// rest of the content
 }
 ```
+
+Full documentation can be found at: https://pkg.go.dev/github.com/adrg/frontmatter.
 
 ## Contributing
 
