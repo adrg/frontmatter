@@ -1,6 +1,7 @@
 package frontmatter_test
 
 import (
+	"io"
 	"strings"
 	"testing"
 
@@ -21,10 +22,15 @@ func TestMatters(t *testing.T) {
 			Metadata metadata `yaml:"metadata" toml:"metadata" json:"metadata"`
 		}
 
+		parseFunc func(r io.Reader, v interface{},
+			formats ...*frontmatter.Format) ([]byte, error)
+		expFunc func(in string) (mExp *matter, rExp string, eExp bool)
+
 		testCase struct {
 			input        string
-			expectedFunc func(in string) (mExp *matter, rExp string, eExp bool)
 			formats      []*frontmatter.Format
+			expParse     expFunc
+			expMustParse expFunc
 		}
 	)
 
@@ -73,7 +79,8 @@ metadata:
   size: 10
 ---
 rest of the file`,
-			expectedFunc: expValidMatter,
+			expParse:     expValidMatter,
+			expMustParse: expValidMatter,
 		},
 
 		{
@@ -85,7 +92,8 @@ metadata:
   size: 10
 ---
 rest of the file`,
-			expectedFunc: expValidMatter,
+			expParse:     expValidMatter,
+			expMustParse: expValidMatter,
 		},
 
 		{
@@ -97,7 +105,8 @@ tags = ["go", "yaml", "json", "toml"]
 size = 10
 +++
 rest of the file`,
-			expectedFunc: expValidMatter,
+			expParse:     expValidMatter,
+			expMustParse: expValidMatter,
 		},
 
 		{
@@ -109,7 +118,8 @@ tags = ["go", "yaml", "json", "toml"]
 size = 10
 ---
 rest of the file`,
-			expectedFunc: expValidMatter,
+			expParse:     expValidMatter,
+			expMustParse: expValidMatter,
 		},
 
 		{
@@ -124,7 +134,8 @@ rest of the file`,
 }
 ;;;
 rest of the file`,
-			expectedFunc: expValidMatter,
+			expParse:     expValidMatter,
+			expMustParse: expValidMatter,
 		},
 
 		{
@@ -139,7 +150,8 @@ rest of the file`,
 }
 ---
 rest of the file`,
-			expectedFunc: expValidMatter,
+			expParse:     expValidMatter,
+			expMustParse: expValidMatter,
 		},
 
 		{
@@ -153,7 +165,8 @@ rest of the file`,
 }
 
 rest of the file`,
-			expectedFunc: expValidMatter,
+			expParse:     expValidMatter,
+			expMustParse: expValidMatter,
 		},
 
 		{
@@ -167,7 +180,8 @@ rest of the file`,
 }
 
 rest of the file`,
-			expectedFunc: expValidMatter,
+			expParse:     expValidMatter,
+			expMustParse: expValidMatter,
 		},
 
 		{
@@ -181,7 +195,8 @@ rest of the file`,
 }
 
 rest of the file`,
-			expectedFunc: expValidMatter,
+			expParse:     expValidMatter,
+			expMustParse: expValidMatter,
 		},
 
 		{
@@ -193,7 +208,8 @@ metadata:
   size: 10
 ---
 `,
-			expectedFunc: expNoRest,
+			expParse:     expNoRest,
+			expMustParse: expNoRest,
 		},
 
 		{
@@ -204,7 +220,8 @@ tags: ["go", "yaml", "json", "toml"]
 metadata:
   size: 10
 ---`,
-			expectedFunc: expNoRest,
+			expParse:     expNoRest,
+			expMustParse: expNoRest,
 		},
 
 		{
@@ -216,7 +233,8 @@ metadata:
   }
 }
 `,
-			expectedFunc: expNoRest,
+			expParse:     expNoRest,
+			expMustParse: expNoRest,
 		},
 
 		{
@@ -228,7 +246,8 @@ metadata:
     "size": 10
   }
 }`,
-			expectedFunc: expNoRest,
+			expParse:     expNoRest,
+			expMustParse: expNoRest,
 		},
 
 		// -----------------
@@ -238,39 +257,45 @@ metadata:
 		{
 			input: `---
 	 ---`,
-			expectedFunc: expEmptyMatter,
+			expParse:     expEmptyMatter,
+			expMustParse: expEmptyMatter,
 		},
 
 		{
 			input: `---yaml
 	 ---`,
-			expectedFunc: expEmptyMatter,
+			expParse:     expEmptyMatter,
+			expMustParse: expEmptyMatter,
 		},
 
 		{
 			input: `+++
 	 +++`,
-			expectedFunc: expEmptyMatter,
+			expParse:     expEmptyMatter,
+			expMustParse: expEmptyMatter,
 		},
 
 		{
 			input: `---toml
 	 ---`,
-			expectedFunc: expEmptyMatter,
+			expParse:     expEmptyMatter,
+			expMustParse: expEmptyMatter,
 		},
 
 		{
 			input: `;;;
 			{}
 	 ;;;`,
-			expectedFunc: expEmptyMatter,
+			expParse:     expEmptyMatter,
+			expMustParse: expEmptyMatter,
 		},
 
 		{
 			input: `---json
 			{}
 	 ---`,
-			expectedFunc: expEmptyMatter,
+			expParse:     expEmptyMatter,
+			expMustParse: expEmptyMatter,
 		},
 
 		{
@@ -278,7 +303,8 @@ metadata:
 	 }
 
 `,
-			expectedFunc: expEmptyMatter,
+			expParse:     expEmptyMatter,
+			expMustParse: expEmptyMatter,
 		},
 
 		{
@@ -286,19 +312,22 @@ metadata:
 {
 	 }
 `,
-			expectedFunc: expEmptyMatter,
+			expParse:     expEmptyMatter,
+			expMustParse: expEmptyMatter,
 		},
 
 		{
 			input: `{
 	 }`,
-			expectedFunc: expEmptyMatter,
+			expParse:     expEmptyMatter,
+			expMustParse: expEmptyMatter,
 		},
 
 		{
 			input: `{
 	 }`,
-			expectedFunc: expEmptyMatter,
+			expParse:     expEmptyMatter,
+			expMustParse: expEmptyMatter,
 		},
 
 		// --------------
@@ -307,18 +336,21 @@ metadata:
 
 		{
 			input:        ``,
-			expectedFunc: expNoMatter,
+			expParse:     expNoMatter,
+			expMustParse: expMatterErr,
 		},
 
 		{
 			input:        `rest of the file`,
-			expectedFunc: expNoMatter,
+			expParse:     expNoMatter,
+			expMustParse: expMatterErr,
 		},
 
 		{
 			input: `
 	`,
-			expectedFunc: expNoMatter,
+			expParse:     expNoMatter,
+			expMustParse: expMatterErr,
 		},
 
 		{
@@ -334,7 +366,8 @@ metadata:
   size: 10
 ---
 rest of the file`,
-			expectedFunc: expNoMatter,
+			expParse:     expNoMatter,
+			expMustParse: expMatterErr,
 		},
 
 		{
@@ -350,7 +383,8 @@ metadata:
   size: 10
 ---
 rest of the file`,
-			expectedFunc: expNoMatter,
+			expParse:     expNoMatter,
+			expMustParse: expMatterErr,
 		},
 
 		{
@@ -363,7 +397,8 @@ tags = ["go", "yaml", "json", "toml"]
 size = 10
 +++
 rest of the file`,
-			expectedFunc: expNoMatter,
+			expParse:     expNoMatter,
+			expMustParse: expMatterErr,
 		},
 
 		{
@@ -376,7 +411,8 @@ tags = ["go", "yaml", "json", "toml"]
 size = 10
 ---
 rest of the file`,
-			expectedFunc: expNoMatter,
+			expParse:     expNoMatter,
+			expMustParse: expMatterErr,
 		},
 
 		{
@@ -392,7 +428,8 @@ rest of the file`,
 }
 ;;;
 rest of the file`,
-			expectedFunc: expNoMatter,
+			expParse:     expNoMatter,
+			expMustParse: expMatterErr,
 		},
 
 		{
@@ -408,7 +445,8 @@ rest of the file`,
 }
 ---
 rest of the file`,
-			expectedFunc: expNoMatter,
+			expParse:     expNoMatter,
+			expMustParse: expMatterErr,
 		},
 
 		{
@@ -423,7 +461,8 @@ rest of the file`,
 }
 
 rest of the file`,
-			expectedFunc: expNoMatter,
+			expParse:     expNoMatter,
+			expMustParse: expMatterErr,
 		},
 
 		// -------------------
@@ -436,7 +475,8 @@ rest of the file`,
 name: "frontmatter"
 
 rest of the file`,
-			expectedFunc: expNoMatter,
+			expParse:     expNoMatter,
+			expMustParse: expMatterErr,
 		},
 
 		{
@@ -445,7 +485,8 @@ rest of the file`,
 name: "frontmatter"
 
 rest of the file`,
-			expectedFunc: expNoMatter,
+			expParse:     expNoMatter,
+			expMustParse: expMatterErr,
 		},
 
 		{
@@ -454,7 +495,8 @@ rest of the file`,
 name = "frontmatter"
 
 rest of the file`,
-			expectedFunc: expNoMatter,
+			expParse:     expNoMatter,
+			expMustParse: expMatterErr,
 		},
 
 		{
@@ -463,7 +505,8 @@ rest of the file`,
 name = "frontmatter"
 
 rest of the file`,
-			expectedFunc: expNoMatter,
+			expParse:     expNoMatter,
+			expMustParse: expMatterErr,
 		},
 
 		{
@@ -473,7 +516,8 @@ rest of the file`,
   "name": "frontmatter",
 
 rest of the file`,
-			expectedFunc: expNoMatter,
+			expParse:     expNoMatter,
+			expMustParse: expMatterErr,
 		},
 
 		{
@@ -483,7 +527,8 @@ rest of the file`,
   "name": "frontmatter",
 
 rest of the file`,
-			expectedFunc: expNoMatter,
+			expParse:     expNoMatter,
+			expMustParse: expMatterErr,
 		},
 
 		{
@@ -492,7 +537,8 @@ rest of the file`,
   "name": "frontmatter",
 
 rest of the file`,
-			expectedFunc: expNoMatter,
+			expParse:     expNoMatter,
+			expMustParse: expMatterErr,
 		},
 
 		{
@@ -500,7 +546,8 @@ rest of the file`,
 name: "frontmatter"
 ---
 rest of the file`,
-			expectedFunc: expNoMatter,
+			expParse:     expNoMatter,
+			expMustParse: expMatterErr,
 		},
 
 		{
@@ -509,7 +556,8 @@ name = "frontmatter"
 +++
 
 rest of the file`,
-			expectedFunc: expNoMatter,
+			expParse:     expNoMatter,
+			expMustParse: expMatterErr,
 		},
 
 		{
@@ -518,7 +566,8 @@ rest of the file`,
 }
 ;;;
 rest of the file`,
-			expectedFunc: expNoMatter,
+			expParse:     expNoMatter,
+			expMustParse: expMatterErr,
 		},
 
 		{
@@ -527,7 +576,8 @@ rest of the file`,
 }
 
 rest of the file`,
-			expectedFunc: expNoMatter,
+			expParse:     expNoMatter,
+			expMustParse: expMatterErr,
 		},
 
 		{
@@ -536,7 +586,8 @@ rest of the file`,
   "name": "frontmatter"
 }
 rest of the file`,
-			expectedFunc: expNoMatter,
+			expParse:     expNoMatter,
+			expMustParse: expMatterErr,
 		},
 
 		{
@@ -546,7 +597,8 @@ rest of the file`,
 }
 should be an empty line
 rest of the file`,
-			expectedFunc: expNoMatter,
+			expParse:     expNoMatter,
+			expMustParse: expMatterErr,
 		},
 
 		// -----------------
@@ -558,7 +610,8 @@ rest of the file`,
 name = "frontmatter"
 ---
 rest of the file`,
-			expectedFunc: expMatterErr,
+			expParse:     expMatterErr,
+			expMustParse: expMatterErr,
 		},
 
 		{
@@ -566,7 +619,8 @@ rest of the file`,
 name = "frontmatter"
 ---
 rest of the file`,
-			expectedFunc: expMatterErr,
+			expParse:     expMatterErr,
+			expMustParse: expMatterErr,
 		},
 
 		{
@@ -574,7 +628,8 @@ rest of the file`,
 name: "frontmatter"
 +++
 rest of the file`,
-			expectedFunc: expMatterErr,
+			expParse:     expMatterErr,
+			expMustParse: expMatterErr,
 		},
 
 		{
@@ -582,7 +637,8 @@ rest of the file`,
 name: "frontmatter"
 ---
 rest of the file`,
-			expectedFunc: expMatterErr,
+			expParse:     expMatterErr,
+			expMustParse: expMatterErr,
 		},
 
 		{
@@ -592,7 +648,8 @@ rest of the file`,
 }
 ;;;
 rest of the file`,
-			expectedFunc: expMatterErr,
+			expParse:     expMatterErr,
+			expMustParse: expMatterErr,
 		},
 
 		{
@@ -602,7 +659,8 @@ rest of the file`,
 }
 ---
 rest of the file`,
-			expectedFunc: expMatterErr,
+			expParse:     expMatterErr,
+			expMustParse: expMatterErr,
 		},
 
 		{
@@ -611,7 +669,8 @@ name: "frontmatter"
 }
 
 rest of the file`,
-			expectedFunc: expMatterErr,
+			expParse:     expMatterErr,
+			expMustParse: expMatterErr,
 		},
 
 		{
@@ -620,7 +679,8 @@ rest of the file`,
 }
 
 rest of the file`,
-			expectedFunc: expMatterErr,
+			expParse:     expMatterErr,
+			expMustParse: expMatterErr,
 		},
 
 		// ------------------
@@ -636,46 +696,52 @@ metadata:
   size: 10
 ...
 rest of the file`,
-			expectedFunc: expValidMatter,
+			expParse:     expValidMatter,
+			expMustParse: expValidMatter,
 			formats: []*frontmatter.Format{
 				frontmatter.NewFormat("...", "...", yaml.Unmarshal),
 			},
 		},
 	}
 
-	failFunc := func(exp, act interface{}) {
-		t.Fatalf("Not equal: \n"+
+	failFunc := func(in string, exp, act interface{}) {
+		t.Fatalf("Input: `%s`\n\nNot equal: \n"+
 			"expected: %v\n"+
-			"actual  : %v", exp, act)
+			"actual  : %v", in, exp, act)
 	}
 
-	checkFunc := func(mExp, mAct *matter, rExp, rAct string, eExp, eAct bool) {
+	checkFunc := func(in string, mExp, mAct *matter,
+		rExp, rAct string, eExp, eAct bool) {
 		if eExp != eAct {
-			failFunc(eExp, eAct)
+			failFunc(in, eExp, eAct)
 		}
 		if mExp.Name != mAct.Name {
-			failFunc(mExp.Name, mAct.Name)
+			failFunc(in, mExp.Name, mAct.Name)
 		}
 		if strings.Join(mExp.Tags, ",") != strings.Join(mAct.Tags, ",") {
-			failFunc(mExp.Tags, mAct.Tags)
+			failFunc(in, mExp.Tags, mAct.Tags)
 		}
 		if mExp.Metadata.Size != mAct.Metadata.Size {
-			failFunc(mExp.Metadata.Size, mAct.Metadata.Size)
+			failFunc(in, mExp.Metadata.Size, mAct.Metadata.Size)
 		}
 		if rExp != rAct {
-			failFunc(rExp, rAct)
+			failFunc(in, rExp, rAct)
 		}
+	}
+
+	testFunc := func(in string, formats []*frontmatter.Format,
+		expFunc expFunc, parseFunc parseFunc) {
+		// Get expected data.
+		mExp, rExp, hasErr := expFunc(in)
+
+		// Get actual data.
+		mAct := &matter{}
+		rest, err := parseFunc(strings.NewReader(in), mAct, formats...)
+		checkFunc(in, mExp, mAct, rExp, string(rest), hasErr, err != nil)
 	}
 
 	for _, tc := range testCases {
-		input := tc.input
-
-		// Get expected data.
-		mExp, rExp, hasErr := tc.expectedFunc(input)
-
-		// Parse reader.
-		mAct := &matter{}
-		rest, err := frontmatter.Parse(strings.NewReader(input), mAct, tc.formats...)
-		checkFunc(mExp, mAct, rExp, string(rest), hasErr, err != nil)
+		testFunc(tc.input, tc.formats, tc.expParse, frontmatter.Parse)
+		testFunc(tc.input, tc.formats, tc.expMustParse, frontmatter.MustParse)
 	}
 }

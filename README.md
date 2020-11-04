@@ -85,6 +85,8 @@ func main() {
 	if err != nil {
 		// Treat error.
 	}
+	// NOTE: If a front matter must be present in the input data, use
+	//       frontmatter.MustParse instead.
 
 	fmt.Printf("%+v\n", matter)
 	fmt.Println(string(rest))
@@ -129,6 +131,8 @@ func main() {
 	if err != nil {
 		// Treat error.
 	}
+	// NOTE: If a front matter must be present in the input data, use
+	//       frontmatter.MustParse instead.
 
 	fmt.Printf("%+v\n", matter)
 	fmt.Println(string(rest))
@@ -140,6 +144,10 @@ func main() {
 ```
 
 Full documentation can be found at: https://pkg.go.dev/github.com/adrg/frontmatter.
+
+## Stargazers over time
+
+[![Stargazers over time](https://starchart.cc/adrg/frontmatter.svg)](https://starchart.cc/adrg/frontmatter)
 
 ## Contributing
 

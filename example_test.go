@@ -25,6 +25,8 @@ rest of the content`)
 	if err != nil {
 		// Treat error.
 	}
+	// NOTE: If a front matter must be present in the input data, use
+	//       frontmatter.MustParse instead.
 
 	fmt.Printf("%+v\n", matter)
 	fmt.Println(string(rest))
@@ -51,6 +53,8 @@ rest of the content`)
 	if err != nil {
 		// Treat error.
 	}
+	// NOTE: If a front matter must be present in the input data, use
+	//       frontmatter.MustParse instead.
 
 	fmt.Printf("%+v\n", matter)
 	fmt.Println(string(rest))
@@ -78,6 +82,8 @@ rest of the content`)
 	if err != nil {
 		// Treat error.
 	}
+	// NOTE: If a front matter must be present in the input data, use
+	//       frontmatter.MustParse instead.
 
 	fmt.Printf("%+v\n", matter)
 	fmt.Println(string(rest))
@@ -108,6 +114,8 @@ rest of the content`)
 	if err != nil {
 		// Treat error.
 	}
+	// NOTE: If a front matter must be present in the input data, use
+	//       frontmatter.MustParse instead.
 
 	fmt.Printf("%+v\n", matter)
 	fmt.Println(string(rest))
