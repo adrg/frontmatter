@@ -20,10 +20,10 @@
     <a href="https://opensource.org/licenses/MIT" rel="nofollow">
         <img alt="MIT License" src="https://img.shields.io/github/license/adrg/frontmatter"/>
     </a>
+    <br />
     <a href="https://goreportcard.com/report/github.com/adrg/frontmatter">
         <img alt="Go report card" src="https://goreportcard.com/badge/github.com/adrg/frontmatter?style=flat" />
     </a>
-    <br />
     <a href="https://github.com/adrg/frontmatter/graphs/contributors">
         <img alt="GitHub contributors" src="https://img.shields.io/github/contributors/adrg/frontmatter" />
     </a>
@@ -33,11 +33,8 @@
     <a href="https://github.com/adrg/frontmatter/issues?q=is%3Aissue+is%3Aclosed">
         <img alt="GitHub closed issues" src="https://img.shields.io/github/issues-closed-raw/adrg/frontmatter" />
     </a>
-    <a href="https://www.buymeacoffee.com/adrg">
-        <img alt="Buy me a coffee" src="https://img.shields.io/static/v1.svg?label=%20&message=Buy%20me%20a%20coffee&color=FF813F&logo=buy%20me%20a%20coffee&logoColor=white"/>
-    </a>
-    <a alt="Github stars" href="https://github.com/adrg/frontmatter/stargazers">
-        <img alt="GitHub stars" src="https://img.shields.io/github/stars/adrg/frontmatter?style=social">
+    <a href="https://ko-fi.com/T6T72WATK">
+        <img alt="Buy me a coffee" src="https://img.shields.io/static/v1.svg?label=%20&message=Buy%20me%20a%20coffee&color=579fbf&logo=buy%20me%20a%20coffee&logoColor=white"/>
     </a>
 
 ## Supported formats
@@ -152,15 +149,7 @@ Full documentation can be found at: https://pkg.go.dev/github.com/adrg/frontmatt
 ## Contributing
 
 Contributions in the form of pull requests, issues or just general feedback,
-are always welcome.
-See [CONTRIBUTING.MD](CONTRIBUTING.md).
-
-## Buy me a coffee
-
-If you found this project useful and want to support it, consider buying me a coffee.  
-<a href="https://www.buymeacoffee.com/adrg">
-    <img src="https://cdn.buymeacoffee.com/buttons/v2/arial-orange.png" alt="Buy Me A Coffee" height="42px">
-</a>
+are always welcome. See [CONTRIBUTING.MD](CONTRIBUTING.md).
 
 ## License
 
