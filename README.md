@@ -8,8 +8,8 @@
 <h3 align="center">Go library for detecting and decoding various content front matter formats.</h3>
 
 <p align="center">
-    <a href="https://github.com/adrg/frontmatter/actions?query=workflow%3ACI">
-        <img alt="Build status" src="https://github.com/adrg/frontmatter/workflows/CI/badge.svg">
+    <a href="https://github.com/adrg/frontmatter/actions/workflows/tests.yml">
+        <img alt="Tests status" src="https://github.com/adrg/frontmatter/actions/workflows/tests.yml/badge.svg">
     </a>
     <a href="https://codecov.io/gh/adrg/frontmatter">
         <img alt="Code coverage" src="https://codecov.io/gh/adrg/frontmatter/branch/master/graphs/badge.svg?branch=master">
