@@ -98,10 +98,12 @@ func (p *parser) extract(f *Format, v interface{}) (bool, error) {
 			continue
 		}
 		if f.RequiresNewLine {
+			next := p.read
 			if line, atEOF, err = p.readLine(); err != nil {
 				return false, err
 			}
 			if line != "" {
+				read = next
 				goto CheckLine
 			}
 		}

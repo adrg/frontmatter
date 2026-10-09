@@ -1,6 +1,7 @@
 package frontmatter_test
 
 import (
+	"fmt"
 	"io"
 	"strings"
 	"testing"
@@ -743,5 +744,54 @@ rest of the file`,
 	for _, tc := range testCases {
 		testFunc(tc.input, tc.formats, tc.expParse, frontmatter.Parse)
 		testFunc(tc.input, tc.formats, tc.expMustParse, frontmatter.MustParse)
+	}
+}
+
+func TestRequiredNewLineDelimiters(t *testing.T) {
+	testCases := []struct {
+		name string
+		text string
+	}{
+		{name: "plain", text: "value\n"},
+		{name: "one literal delimiter", text: "...\n"},
+		{name: "consecutive literal delimiters", text: "...\n...\n"},
+		{name: "delimiter followed by content", text: "...\nvalue\n...\n"},
+	}
+	parsers := []struct {
+		name  string
+		parse func(io.Reader, interface{}, ...*frontmatter.Format) ([]byte, error)
+	}{
+		{name: "Parse", parse: frontmatter.Parse},
+		{name: "MustParse", parse: frontmatter.MustParse},
+	}
+	for _, parser := range parsers {
+		t.Run(parser.name, func(t *testing.T) {
+			for _, tc := range testCases {
+				t.Run(tc.name, func(t *testing.T) {
+					for _, lineEnding := range []string{"\n", "\r\n"} {
+						t.Run(fmt.Sprintf("line ending %q", lineEnding), func(t *testing.T) {
+							input := "---yaml\ntext: |\n  " + strings.ReplaceAll(
+								strings.TrimSuffix(tc.text, "\n"), "\n", "\n  ") + "\n...\n\nbody"
+							input = strings.ReplaceAll(input, "\n", lineEnding)
+							format := frontmatter.NewFormat("---yaml", "...", yaml.Unmarshal)
+							format.RequiresNewLine = true
+							var matter struct {
+								Text string `yaml:"text"`
+							}
+							rest, err := parser.parse(strings.NewReader(input), &matter, format)
+							if err != nil {
+								t.Fatal(err)
+							}
+							if matter.Text != tc.text {
+								t.Errorf("expected text %q, got %q", tc.text, matter.Text)
+							}
+							if string(rest) != "body" {
+								t.Errorf("expected body %q, got %q", "body", rest)
+							}
+						})
+					}
+				})
+			}
+		})
 	}
 }
