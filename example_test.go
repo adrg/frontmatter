@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	"github.com/adrg/frontmatter"
-	"gopkg.in/yaml.v2"
+	"go.yaml.in/yaml/v3"
 )
 
 func ExampleParse_yAML() {

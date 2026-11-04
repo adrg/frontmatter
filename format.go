@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 
 	"github.com/BurntSushi/toml"
-	"gopkg.in/yaml.v2"
+	"go.yaml.in/yaml/v3"
 )
 
 // UnmarshalFunc decodes the passed in `data` and stores it into
