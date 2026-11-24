@@ -21,9 +21,6 @@
         <img alt="MIT License" src="https://img.shields.io/github/license/adrg/frontmatter"/>
     </a>
     <br />
-    <a href="https://goreportcard.com/report/github.com/adrg/frontmatter">
-        <img alt="Go report card" src="https://goreportcard.com/badge/github.com/adrg/frontmatter?style=flat" />
-    </a>
     <a href="https://github.com/adrg/frontmatter/graphs/contributors">
         <img alt="GitHub contributors" src="https://img.shields.io/github/contributors/adrg/frontmatter" />
     </a>
