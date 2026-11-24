@@ -82,23 +82,40 @@ func (p *parser) detect(formats []*Format) (*Format, error) {
 }
 
 func (p *parser) extract(f *Format, v interface{}) (bool, error) {
+	jsonObject := f.Start == "{" && f.End == "}" && f.UnmarshalDelims
+	depth := 0
+	if jsonObject {
+		depth = scanJSONBraces(f.Start, depth)
+	}
+
+	isEnd := func(line string) bool {
+		return line == f.End && (!jsonObject || depth == 0)
+	}
+	readLine := func() (string, bool, error) {
+		line, atEOF, err := p.readLine()
+		if jsonObject {
+			depth = scanJSONBraces(line, depth)
+		}
+		return line, atEOF, err
+	}
+
 	for {
 		read := p.read
 
-		line, atEOF, err := p.readLine()
+		line, atEOF, err := readLine()
 		if err != nil {
 			return false, err
 		}
 
 	CheckLine:
-		if line != f.End {
+		if !isEnd(line) {
 			if atEOF {
 				return false, err
 			}
 			continue
 		}
 		if f.RequiresNewLine {
-			if line, atEOF, err = p.readLine(); err != nil {
+			if line, atEOF, err = readLine(); err != nil {
 				return false, err
 			}
 			if line != "" {
@@ -129,4 +146,37 @@ func (p *parser) readLine() (string, bool, error) {
 	p.read += len(line)
 	_, err = p.output.Write(line)
 	return string(bytes.TrimSpace(line)), atEOF, err
+}
+
+func scanJSONBraces(line string, depth int) int {
+	inString := false
+	escaped := false
+
+	for i := 0; i < len(line); i++ {
+		c := line[i]
+		if escaped {
+			escaped = false
+			continue
+		}
+		if inString {
+			switch c {
+			case '\\':
+				escaped = true
+			case '"':
+				inString = false
+			}
+			continue
+		}
+
+		switch c {
+		case '"':
+			inString = true
+		case '{':
+			depth++
+		case '}':
+			depth--
+		}
+	}
+
+	return depth
 }

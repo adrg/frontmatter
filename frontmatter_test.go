@@ -745,3 +745,31 @@ rest of the file`,
 		testFunc(tc.input, tc.formats, tc.expMustParse, frontmatter.MustParse)
 	}
 }
+
+func TestParseJSONMatterWithNestedObjectAndBlankLine(t *testing.T) {
+	input := `{
+  "metadata": {
+    "size": 10
+  }
+
+}
+
+rest of the file`
+
+	var matter struct {
+		Metadata struct {
+			Size int `json:"size"`
+		} `json:"metadata"`
+	}
+
+	rest, err := frontmatter.Parse(strings.NewReader(input), &matter)
+	if err != nil {
+		t.Fatalf("Parse returned an error: %v", err)
+	}
+	if matter.Metadata.Size != 10 {
+		t.Fatalf("unexpected metadata size: %d", matter.Metadata.Size)
+	}
+	if string(rest) != "rest of the file" {
+		t.Fatalf("unexpected rest: %q", rest)
+	}
+}
